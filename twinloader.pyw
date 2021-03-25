@@ -4,21 +4,22 @@ import clipboard
 import keyboard
 import winsound
 import win32gui
+from pyWinActivate import win_activate
 
-
+title = "RPG Assignment2.1.xlsm  -  Shared"
 
 user = getpass.getuser() + "@gfk.com"
 
-def window_enum_handler(hwnd, resultList):
-    if win32gui.IsWindowVisible(hwnd) and win32gui.GetWindowText(hwnd) != '':
-        resultList.append((hwnd, win32gui.GetWindowText(hwnd)))
+# def window_enum_handler(hwnd, resultList):
+#     if win32gui.IsWindowVisible(hwnd) and win32gui.GetWindowText(hwnd) != '':
+#         resultList.append((hwnd, win32gui.GetWindowText(hwnd)))
 
-def get_app_list(handles=[]):
-    mlst=[]
-    win32gui.EnumWindows(window_enum_handler, handles)
-    for handle in handles:
-        mlst.append(handle)
-    return mlst
+# def get_app_list(handles=[]):
+#     mlst=[]
+#     win32gui.EnumWindows(window_enum_handler, handles)
+#     for handle in handles:
+#         mlst.append(handle)
+#     return mlst
 
 def pool_rpg_mails():
         new_dist_codes = []
@@ -76,9 +77,20 @@ def pool_rpg_mails():
             codes = codes.replace(']', '')
 
 
-            handle = win32gui.FindWindow(0, "RPG Assignment2.1.xlsm  -  Shared - Excel")  #//paassing 0 as I dont know classname 
-            win32gui.ShowWindow(handle, True)
-            win32gui.SetForegroundWindow(handle)  #//put the window in foreground
+            try:
+                win_activate(window_title=title, partial_match=True)
+                # handle = win32gui.FindWindow(0, "RPG Assignment2.1.xlsm  -  Shared - Excel")  #//paassing 0 as I dont know classname 
+                # win32gui.ShowWindow(handle, True)
+                # win32gui.SetForegroundWindow(handle)  #//put the window in foreground
+
+            except:
+                pass
+                # handle = win32gui.FindWindow(0, "RPG Assignment2.1.xlsm  -  Shared - Saved")
+                # win32gui.ShowWindow(handle, True)
+                # win32gui.SetForegroundWindow(handle)  #//put the window in foreground
+                
+            # win32gui.ShowWindow(handle, True)
+            # win32gui.SetForegroundWindow(handle)  #//put the window in foreground
 
             clipboard.copy(codes)
             keyboard.press_and_release("f2")
