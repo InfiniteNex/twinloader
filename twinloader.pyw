@@ -48,6 +48,12 @@ def pool_rpg_mails():
                 #get dist code from message name
                 x = str(last_message).split("(")
                 y = x[1].split(")")
+
+                # check if value taken is not TWIN isntead of dist code
+                if y[0].isalpha:
+                    y = x[2].split(")")
+
+                # continue script with extracted code
                 if y[0] not in new_dist_codes:
                     new_dist_codes.append(y[0])
                 #mark as read and categorize
