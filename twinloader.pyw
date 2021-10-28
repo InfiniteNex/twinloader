@@ -50,7 +50,7 @@ def pool_rpg_mails():
                 y = x[1].split(")")
 
                 # check if value taken is not TWIN isntead of dist code
-                if y[0].isalpha:
+                if y[0].isalpha():
                     y = x[2].split(")")
 
                 # continue script with extracted code
