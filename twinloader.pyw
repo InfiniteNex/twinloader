@@ -4,27 +4,16 @@ import clipboard
 import keyboard
 import winsound
 import win32gui
-from pyWinActivate import win_activate
+import pyWinActivate as pw
 
-title = "RPG Assignment2.1.xlsm  -  Shared"
 
+title = "RPG Assignment2.1.xlsm"
 user = getpass.getuser() + "@gfk.com"
-
-# def window_enum_handler(hwnd, resultList):
-#     if win32gui.IsWindowVisible(hwnd) and win32gui.GetWindowText(hwnd) != '':
-#         resultList.append((hwnd, win32gui.GetWindowText(hwnd)))
-
-# def get_app_list(handles=[]):
-#     mlst=[]
-#     win32gui.EnumWindows(window_enum_handler, handles)
-#     for handle in handles:
-#         mlst.append(handle)
-#     return mlst
+window_found = False
 
 def pool_rpg_mails():
         new_dist_codes = []
 
-        print("Pooling")
         #access items in the TWIN folder
         Outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI") #Opens Microsoft Outlook
         folder = Outlook.Folders[user] #User mails
@@ -42,7 +31,6 @@ def pool_rpg_mails():
         timestamp = [str(last_message), split[5][0:10], split[5][11:19]]
 
         # loop through the folder
-        # try:
         for i in messages:
             if last_message.Categories != "RPG":
                 #get dist code from message name
@@ -65,14 +53,9 @@ def pool_rpg_mails():
                 last_message = messages.GetPrevious()
             except:
                 pass
-        # except:
-        #     print("No more unread messages in this folder.")
 
         if not new_dist_codes:
-            winsound.Beep(120, 300)
-            winsound.Beep(100, 300)
-            winsound.Beep(80, 300)
-            print("No unread messages in this folder.")
+            pass
 
         else:
             #clean the codes from unwanted symbols
@@ -84,27 +67,20 @@ def pool_rpg_mails():
 
 
             try:
-                win_activate(window_title=title, partial_match=True)
-                # handle = win32gui.FindWindow(0, "RPG Assignment2.1.xlsm  -  Shared - Excel")  #//paassing 0 as I dont know classname 
-                # win32gui.ShowWindow(handle, True)
-                # win32gui.SetForegroundWindow(handle)  #//put the window in foreground
-
+                pw.win_activate(window_title=title, partial_match=True)
             except:
                 pass
-                # handle = win32gui.FindWindow(0, "RPG Assignment2.1.xlsm  -  Shared - Saved")
-                # win32gui.ShowWindow(handle, True)
-                # win32gui.SetForegroundWindow(handle)  #//put the window in foreground
-                
-            # win32gui.ShowWindow(handle, True)
-            # win32gui.SetForegroundWindow(handle)  #//put the window in foreground
 
             clipboard.copy(codes)
             keyboard.press_and_release("f2")
 
-            #successful code execution
-            winsound.Beep(120, 300)
-            winsound.Beep(140, 300)
-            winsound.Beep(160, 300)
+
+def check_for_open_excel_window():
+    window_found = pw.check_win_exist(window_title=title)
+    if window_found:
+        pool_rpg_mails()
 
 
-pool_rpg_mails()
+check_for_open_excel_window()
+
+
